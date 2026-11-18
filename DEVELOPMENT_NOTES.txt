@@ -1,0 +1,24 @@
+Granny: Escape Together Freeze/No-Clip v0.1.2 Alpha (Nov 17, 2026)
+Evidence: uploaded ModTest_20261117_074107 and _074732 diagnostic ZIPs.
+Ghost frozen and detected after F6: BP_GranddaughterGhost_C; glitchy pulse
+persists even far away. BP_GranddaughterSpawnManager_C separately detected;
+F8 exposed TryPrepareSpawnTimerHandle, InitialSpawnTimerHandle,
+bGlobalCooldownActive, bOtherScreamerActive, CurrentGhost. Ghost class exposes
+ClearTwitchTimer, GhostMustBeDeletted, GazeTimer, PresenceTimer,
+TwitchTimerHandle, bAttackTriggered. Small spider spawned and frozen.
+The logs do not identify the exact local postprocess/camera effect, so removal
+of ghost + StopAllCameraShakes is a best-effort fix, not an in-game guarantee.
+
+Design: ghost classes intentionally excluded from AI freezing. On F6 ON, pause
+only manager timers if reflected Kismet API works; hold manager cooldown flags
+true and restore after F6 OFF. Trigger ghost's game-specific cleanup if
+available; destroy ghost actor; reset only local player's current camera shake.
+Existing and late-spawn ghosts handled, even on level transitions. No global
+pause. If Kismet CDO API unavailable, cooldown-flag and spawn hook fallback.
+
+Flight: old polling returned no explicit errors but was visually jumpy; kept
+old Ctrl descent, introduced 40ms 6cm step for continuous Space hold. The
+GetInputKeyTimeDown() secondary probe is used if IsInputKeyDown() fails.
+
+No flashlight behavior was modified. No online blocking. Existing F6 gun logic
+and local damage guard unchanged. This is not verified inside Granny yet.
